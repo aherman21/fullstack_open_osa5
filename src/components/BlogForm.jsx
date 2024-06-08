@@ -1,8 +1,11 @@
+// not in use yet
+
 const blogForm = () => {
     return (
-    <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
+    <form onSubmit={addBlog}>
+        <h2>create new</h2>
+        <input value={newNote} onChange={handleBlogChange} />
+        <button type="submit">savee</button>
     </form>
 )}
-export default noteForm
+export default blogForm

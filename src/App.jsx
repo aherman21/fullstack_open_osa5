@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog , setNewBlog] = useState('')
+  const [newBlogTitle , setNewBlogTitle] = useState('')
+  const [newBlogAuthor , setNewBlogAuthor] = useState('')
+  const [newBlogUrl , setNewBlogUrl] = useState('')
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -30,7 +33,9 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
-      content: newBlog,
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl
     }
 
     blogService
@@ -104,10 +109,28 @@ const App = () => {
   
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <input
-        value={newBlog}
-        onChange={handleBlogChange}
-      />
+    <h2>create new</h2>
+      <div>
+        Title:
+        <input
+          value={newBlogTitle}
+          onChange={({ target }) => setNewBlogTitle(target.value)}
+        />
+      </div>
+      <div>
+        Author:
+        <input
+          value={newBlogAuthor}
+          onChange={({ target }) => setNewBlogAuthor(target.value)}
+        />
+      </div>
+      <div>
+        Url:
+        <input
+          value={newBlogUrl}
+          onChange={({ target }) => setNewBlogUrl(target.value)}
+        />
+      </div>
       <button type="submit">save</button>
     </form>
   )
