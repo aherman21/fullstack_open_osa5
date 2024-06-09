@@ -12,6 +12,8 @@ const App = () => {
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
     blogService
@@ -43,7 +45,34 @@ const App = () => {
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
           setNewBlog('')
+          showNotification(`A new blog €´${returnedBlog.title} added!`, 'success')
         })
+        .catch(error => {
+          showNotification(`Failed to add blog: ${error}`, 'error')
+        })
+  }
+
+  const deleteBlog = (id) => {
+    if (window.confirm('Do you really want to delete this blog')) {
+      blogService
+        .remove(id)
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+          showNotification(`Blog deleted successfully`, 'success')
+        })
+        .catch(error => {
+          showNotification(`Failed to delete blog: ${error.message}`, 'error')
+        })
+    }
+  }
+
+  const showNotification = (message, type) => {
+    setNotification(message)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 3000)
   }
 
   const handleBlogChange = (event) => {
@@ -138,6 +167,7 @@ const App = () => {
 
   return (
     <div>
+      {notification && <div className={notificationType}>{notification}</div>}
       {!user && loginForm()}
       {user && <div>
       <p>{user.name} logged in</p>
@@ -145,7 +175,10 @@ const App = () => {
       {blogForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>
+        <div>
         <Blog key={blog.id} blog={blog} />
+        <button onClick={() => deleteBlog(blog.id)}>delete</button>
+        </div>
       )}
       </div>}
 

@@ -1,5 +1,12 @@
 body {
     background-color: rgb(35, 35, 35);
     color: wheat
+}
 
+.success {
+    color: green
+}
+
+.error {
+    color: red
 }
