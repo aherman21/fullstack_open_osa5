@@ -86,13 +86,14 @@ const App = () => {
       )
 
       blogService.setToken(user.token)
+      showNotification(`logging in as ${user.username} succeeded`, 'success')
       setUser(user)
       setUserName('')
       setPassword('')
     } catch (exception) {
       console.log('Wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
+        showNotification('Wrong username or password', 'error')
       }, 5000)
     }
   }
