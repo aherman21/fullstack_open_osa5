@@ -44,8 +44,7 @@ const App = () => {
       .create(blogObject)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          setNewBlog('')
-          showNotification(`A new blog €´${returnedBlog.title} added!`, 'success')
+          showNotification(`A new blog ${returnedBlog.title} added!`, 'success')
         })
         .catch(error => {
           showNotification(`Failed to add blog: ${error}`, 'error')
@@ -73,10 +72,6 @@ const App = () => {
       setNotification(null)
       setNotificationType(null)
     }, 3000)
-  }
-
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
   }
 
   const handleLogin = async (event) => {
