@@ -1,7 +1,12 @@
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)
+import deleteBlog from '../App'
+
+const Blog = ({ blog }) => {
+  console.log(blog);
+  return (
+    <div>
+      {blog.title} {blog.author}
+    </div>
+  );  
+}
 
 export default Blog

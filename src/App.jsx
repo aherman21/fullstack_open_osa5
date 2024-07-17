@@ -2,13 +2,18 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog , setNewBlog] = useState('')
+  const [newBlogTitle , setNewBlogTitle] = useState('')
+  const [newBlogAuthor , setNewBlogAuthor] = useState('')
+  const [newBlogUrl , setNewBlogUrl] = useState('')
   const [username, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
     blogService
@@ -30,19 +35,43 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
-      content: newBlog,
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl
     }
 
     blogService
       .create(blogObject)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          setNewBlog('')
+          showNotification(`A new blog ${returnedBlog.title} added!`, 'success')
+        })
+        .catch(error => {
+          showNotification(`Failed to add blog: ${error}`, 'error')
         })
   }
 
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
+  const deleteBlog = (id) => {
+    if (window.confirm('Do you really want to delete this blog')) {
+      blogService
+        .remove(id)
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+          showNotification(`Blog deleted successfully`, 'success')
+        })
+        .catch(error => {
+          showNotification(`Failed to delete blog: ${error.message}`, 'error')
+        })
+    }
+  }
+
+  const showNotification = (message, type) => {
+    setNotification(message)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 3000)
   }
 
   const handleLogin = async (event) => {
@@ -104,10 +133,28 @@ const App = () => {
   
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <input
-        value={newBlog}
-        onChange={handleBlogChange}
-      />
+    <h2>create new</h2>
+      <div>
+        Title:
+        <input
+          value={newBlogTitle}
+          onChange={({ target }) => setNewBlogTitle(target.value)}
+        />
+      </div>
+      <div>
+        Author:
+        <input
+          value={newBlogAuthor}
+          onChange={({ target }) => setNewBlogAuthor(target.value)}
+        />
+      </div>
+      <div>
+        Url:
+        <input
+          value={newBlogUrl}
+          onChange={({ target }) => setNewBlogUrl(target.value)}
+        />
+      </div>
       <button type="submit">save</button>
     </form>
   )
@@ -115,6 +162,7 @@ const App = () => {
 
   return (
     <div>
+      {notification && <div className={notificationType}>{notification}</div>}
       {!user && loginForm()}
       {user && <div>
       <p>{user.name} logged in</p>
@@ -122,7 +170,10 @@ const App = () => {
       {blogForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>
+        <div>
         <Blog key={blog.id} blog={blog} />
+        <button onClick={() => deleteBlog(blog.id)}>delete</button>
+        </div>
       )}
       </div>}
 
