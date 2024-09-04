@@ -47,7 +47,7 @@ const App = () => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
-        const updatedBlogs = blogs.concat(returnedBlog)
+        const updatedBlogs = blogs.concat({ ...returnedBlog, user: user })
         const sortedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
         setBlogs(sortedBlogs)
       })
