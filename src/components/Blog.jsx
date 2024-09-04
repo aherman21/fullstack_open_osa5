@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 
 
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, incrementLike }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -15,7 +15,7 @@ const Blog = ({ blog, updateBlog }) => {
 
 
 
-  const incrementLike = async () => {
+  const handleIncrementLike = async () => {
     const updatedBlog = { ...blog, likes: likes + 1 }
     const returnedBlog = await blogService.like(blog.id, updatedBlog)
     console.log(blog)
@@ -32,21 +32,23 @@ const Blog = ({ blog, updateBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author}
+    <li className='blog' style={blogStyle}>
+      {blog.title}
       <button onClick={toggleDetailVisibility}>{detailsVisible ? 'hide' : 'show'}</button>
       <div style={showWhenDetailsVisible}>
-        {blog.url}
+        url: {blog.url}
       </div>
       <div style={showWhenDetailsVisible}>
-        {blog.user ? blog.user.username : 'unknown user'}
+        posted by user: {blog.user ? blog.user.username : 'unknown user'}
       </div>
-
       <div style={showWhenDetailsVisible}>
-        likes {blog.likes}
-        <button onClick={incrementLike}>like</button>
+        author: {blog.author}
       </div>
-    </div>
+      <div style={showWhenDetailsVisible}>
+        likes: {blog.likes}
+        <button onClick={incrementLike || handleIncrementLike}>like</button>
+      </div>
+    </li>
 
   )
 }
