@@ -75,7 +75,7 @@ const App = () => {
     setTimeout(() => {
       setNotification(null)
       setNotificationType(null)
-    }, 3000)
+    }, 4000)
   }
 
   const handleLogin = async (event) => {
@@ -96,9 +96,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       console.log('Wrong credentials')
-      setTimeout(() => {
-        showNotification('Wrong username or password', 'error')
-      }, 5000)
+      showNotification('Wrong username or password', 'error')
     }
   }
 
