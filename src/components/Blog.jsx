@@ -32,7 +32,7 @@ const Blog = ({ blog, updateBlog, incrementLike }) => {
   }
 
   return (
-    <li className='blog' style={blogStyle}>
+    <li className='blog' style={blogStyle} data-testid='blog'>
       {blog.title}
       <button onClick={toggleDetailVisibility}>{detailsVisible ? 'hide' : 'show'}</button>
       <div style={showWhenDetailsVisible}>

@@ -149,12 +149,14 @@ const App = () => {
         <h2>blogs</h2>
 
         {blogs.map(blog =>
-          <>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlogs} />
+          <div key={blog.id}>
+            <Blog blog={blog} updateBlog={updateBlogs} />
             {blog.user && blog.user.username === user.username && (
               <button onClick={() => deleteBlog(blog.id)}>delete</button>
+
+
             )}
-          </>
+          </div>
         )}
       </div>}
 
